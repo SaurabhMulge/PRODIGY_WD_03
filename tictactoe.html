@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            grid-gap: 10px;
+            margin: 0 auto;
+            width: 300px;
+            height: 300px;
+        }
+
+        .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            font-size: 1.5em;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="board"></div>
+    <button onclick="resetBoard()">Reset</button>
+
+    <script>
+        let board = Array(9).fill(null);
+        let currentPlayer = 'X';
+
+        function resetBoard() {
+            board = Array(9).fill(null);
+            currentPlayer = 'X';
+            document.getElementById('board').innerHTML = '';
+            renderBoard();
+        }
+
+        function renderBoard() {
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.id = `cell-${i}`;
+                cell.classList.add('cell');
+                cell.addEventListener('click', () => handleClick(i));
+                document.getElementById('board').appendChild(cell);
+            }
+        }
+
+        function handleClick(index) {
+          if (!board[index]) {
+        board[index] = currentPlayer;
+        document.getElementById(`cell-${index}`).textContent = currentPlayer;
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+
+    if (checkWin(currentPlayer)) {
+        alert(`Player ${currentPlayer} wins!`);
+        resetBoard();
+    } else if (board.every(cell => cell)) {
+        alert('It\'s a tie!');
+        resetBoard();
+    }
+
+        }
+
+        function checkWin(player) {
+            const wins = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            return wins.some(win => win.every(cell => board[cell] === player));
+        }
+
+        renderBoard();
+    </script>
+</body>
+</html>
